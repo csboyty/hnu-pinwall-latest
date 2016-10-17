@@ -1,0 +1,54 @@
+html{
+    /*width: 100%;
+    height:100%;*/
+}
+body{
+    margin:0px;
+    padding:0px;
+    position: absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom: 0;
+	font-family: "微软雅黑", "黑体", Arial, "Times New Roman", Verdana;
+}
+.presentation,.main {
+    width: 100%;
+    height: 100%;
+}
+.presentation .crocodoc-viewport {
+    overflow: visible;
+}
+
+.controls-container {
+    position: absolute;
+    bottom: 10px;
+	left:0;
+	right:0;
+	text-align: center;
+    overflow: visible;
+    z-index: 1;
+	vertical-align: middle;
+	font-size:0;
+}
+.controls-container button{
+	display:inline-block;
+	height:40px;
+	width:40px;
+	vertical-align: middle;
+	border:none;
+	background:#666;
+	color: #fff;
+	font-size: 12px;
+}
+.controls-container span{
+	display:inline-block;
+	height:40px;
+	line-height: 40px;
+	vertical-align: middle;
+	padding:0 10px;
+	margin:0 2px;
+	font-size:12px;
+	background:#666;
+	color: #fff;
+}

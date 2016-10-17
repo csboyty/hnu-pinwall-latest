@@ -1,0 +1,42 @@
+<h3 class="de_popout_title">{{popFlags.title}}</h3>
+<a href="" class="de_popout_x_btn" ng-click="closePop()">关闭</a>
+<div class="de_wrapper de_transition" ng-controller="signIn">
+    <article class="de_borderbox de_popout_login">
+        <div class="de_login_col de_left_col de_borderbox">
+            <form class="de_form_email_login" name="loginForm" ng-submit="loginSubmit()" novalidate>
+                <p class="de_email_field">
+                    <input type="email" class="de_borderbox de_inputbox_gray" own-required required ng-model="user.email"
+                        ng-maxlength="32" autocomplete="off" name="email"  placeholder="邮箱">
+                    <span class="error" ng-if="loginForm.email.$dirty && loginForm.email.$invalid">
+                        <label ng-if="loginForm.email.$error.ownRequired">{{validMessage.required}}</label>
+                        <label ng-if="loginForm.email.$error.email">{{validMessage.email}}</label>
+                        <label ng-if="loginForm.email.$error.maxlength">{{validMessage.maxLength | setMaxLength:32}}</label>
+                    </span>
+                </p>
+
+                <p class="de_pwd_field">
+                    <input type="password" class="de_borderbox de_inputbox_gray" own-required required ng-model="user.password"
+                        ng-minlength="6" autocomplete="off" ng-maxlength="20" name="password" placeholder="密码">
+                    <span class="error" ng-if="loginForm.password.$dirty && loginForm.password.$invalid" >
+                        <label ng-if="loginForm.password.$error.ownRequired">{{validMessage.required}}</label>
+                        <label ng-if="loginForm.password.$error.minlength">{{validMessage.minLength | setMinLength:6}}</label>
+                        <label ng-if="loginForm.password.$error.maxlength">{{validMessage.maxLength | setMaxLength:20}}</label>
+                    </span>
+                </p>
+
+                <div class="de_misc_field">
+                    <input type="checkbox" ng-model="user.rememberMe" name="rememberMe">
+                    <label>记住我</label>
+
+                    <p class="de_forgot_pwd"><a href="" ng-click="forgetPwd()">忘记了密码？</a></p>
+                </div>
+                <input type="submit" class="de_green_btn de_submit_btn" ng-disabled="loginForm.$invalid" value="登录">
+
+            </form>
+        </div>
+        <div class="de_borderbox de_reg_col de_right_col">
+            <h4>第一次来？请创建一个帐号。</h4>
+            <a href="" class="de_button de_borderbox de_reg_btn" ng-click="toRegPanel()">注册</a>
+        </div>
+    </article>
+</div>

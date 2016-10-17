@@ -1,0 +1,48 @@
+<header class="de_magager_header">
+    <span class="de_manager_title">作品管理</span>
+    <div class="de_manager_search">
+        <input type="text" ng-model="keyword" class="de_borderbox de_inputbox_gray">
+        <select ng-model="type" ng-options="t.value as t.name for t in types">
+        </select>
+        <input type="button" value="筛选" ng-click="tableSearch();" class="de_button">
+    </div>
+</header>
+
+<table template-pagination="ownPagination" class="de_manager_table" ng-table="table">
+    <thead>
+    <tr><th>作品</th><th class="name_col">上传者</th><th class="time_col">上传时间</th><th>评论</th><th>赞</th><th>奖章</th><th class="aciton_col">操作</th></tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="d in $data">
+            <td><a href="" ng-click="showProjectDetail(d.artifact.id)">{{d.artifact.name}}</a></td>
+            <td><a ng-href="users/{{d.user.id}}">{{d.user.fullname}}</a></td>
+            <td>{{d.artifact.created_at}}</td>
+            <td>{{d.artifact.comment_count}}</td>
+            <td>{{d.artifact.praise_count}}</td>
+            <td>{{d.artifact.honor_count}}</td>
+            <td>
+                <a ng-href="projects/{{d.artifact.id}}/update">编辑</a>
+                &nbsp;
+                <a href="" ng-click="deleteProject(d.artifact.id,$index)" class="del">删除</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script type="text/ng-template" id="ownPagination">
+    <!--表达式中不能用比较运算符，需要自己写filter（minNumber) -->
+    <div class="tableInfo">显示第 {{(params.page()-1)*params.count()+1}} 至
+        {{params.page()*params.count() | getMinNumber:params.total()}}
+        项结果，共 {{params.total()}} 项</div>
+    <ul class="pagination">
+        <li ng-repeat="page in pages"
+            ng-class="{'disabled': !page.active}"
+            ng-switch="page.type">
+            <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a>
+            <a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span>{{page.number}}</span></a>
+            <a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span>{{page.number}}</span></a>
+            <a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span>{{page.number}}</span></a>
+            <a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a>
+        </li>
+    </ul>
+</script>

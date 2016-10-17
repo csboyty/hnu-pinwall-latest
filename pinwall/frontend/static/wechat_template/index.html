@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html ng-app="weChatApp">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no"/>
+    <title>图钉墙 - HNU Design</title>
+    <base id="de_base_url" href="http://design.hnu.edu.cn/pinwall/wechat_template/">
+    <link href="css/wechat_template.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="js/lib/angular.min.js"></script>
+    <!--<script type="text/javascript" src="js/src/weChat.js"></script>-->
+    <script type="text/javascript" src="js/src/app.js"></script>
+</head>
+<body>
+<article ng-controller="projectDetail" class="de_project_detail de_borderbox">
+    <h1 class="logo"><img src="images/app/logo_40.png" /></h1>
+    <h2>{{project.name}}</h2>
+    <div class="user_info">
+        <img class="photo" ng-src="{{project.user.setting.profile_image}}">
+
+        <p class="name">{{project.user.fullname}}</p>
+    </div>
+    <ul class="de_stats_tags">
+       <li class="badges" id="honorCount" title="勋章">{{project.honor_count}}</li>
+        <li class="likes" id="praiseCount" title="赞">{{project.praise_count}}</li>
+        <li class="comments" id="commentsCount" title="评论">{{project.comment_count}}</li>
+    </ul>
+
+
+    <p class="publishtime">{{project.created_at}}</p>
+    <p class="abstract"> {{project.description}}</p>
+
+    <!--附件-->
+    <div class="main_content" >
+        <figure ng-repeat="at in project.assets" ng-switch="at.type">
+            <img ng-switch-when="1" ng-src="{{at.profile_image}}"/>
+
+            <a ng-switch-when="4" ng-if="isAndroid" play-mp4="{{at.media_file}}" href="" class="de_has_media de_has_video">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+            <a ng-switch-when="4" ng-if="!isAndroid" ng-href="{{at.media_file}}" target="_self" class="de_has_media de_has_video">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <!-- <a ng-switch-when="networkVideo" ng-click="showAttachmentDetail(at.attachmentMediaLocation,at.type,at.attachmentId)"
+                href="" class="de_has_media de_has_web_video">
+                 <img ng-src="{{at.attachmentPreviewLocation}}"/></a>
+
+             <a ng-switch-when="3d" ng-click="showAttachmentDetail(at.attachmentMediaLocation,at.type,at.attachmentId)"
+                href="" class="de_has_media de_has_3d">
+                 <img ng-src="{{at.attachmentPreviewLocation}}"/></a>-->
+
+
+            <a ng-switch-when="2" ng-href="{{at.view_url}}" target="_self"  class="de_has_media de_has_ppt">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="128" ng-href="{{at.view_url}}" target="_self" class="de_has_media de_has_pdf">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="32" ng-href="{{at.media_file}}" target="_self" class="de_has_media de_has_file">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="64" ng-href="{{at.media_file}}" target="_self"
+               class="de_has_media de_has_flash">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="256" ng-href="{{at.view_url}}" target="_self" class="de_has_media de_has_html5">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <figcaption ng-if="at.name||at.description">
+                {{at.name}}
+                <span class="description">
+                    {{at.description}}
+                </span>
+            </figcaption>
+
+        </figure>
+    </div>
+</article>
+<footer class="de_footer">
+        <p>© 湖南大学设计艺术学院，design@hnu.edu.cn</p>
+</footer>
+<script>
+    //一定要放在页面里，不然android无法使用
+    shareData={
+        imgUrl:"",
+        lineLink:location.href,
+        descContent:"",
+        shareTitle:"",
+        appId:""
+    };
+    function shareFriend() {
+        WeixinJSBridge.invoke('sendAppMessage',{
+            "appid": shareData.appId,
+            "img_url": shareData.imgUrl,
+            "img_width": "200",
+            "img_height": "200",
+            "link": shareData.lineLink,
+            "desc": shareData.descContent,
+            "title": shareData.shareTitle
+        }, function(res) {
+
+        })
+    }
+    function shareTimeline() {
+        WeixinJSBridge.invoke('shareTimeline',{
+            "appid":"",  //appid 设置空就好了。
+            "img_url": shareData.imgUrl,
+            "img_width": "200",
+            "img_height": "200",
+            "link": shareData.lineLink,
+            "desc": shareData.descContent,
+            "title": shareData.shareTitle
+        }, function(res) {
+
+        });
+    }
+    function shareWeibo() {
+        WeixinJSBridge.invoke('shareWeibo',{
+            "content": shareData.descContent,
+            "url": shareData.lineLink
+        }, function(res) {
+
+        });
+    }
+
+    // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        //alert("in html");
+        // 发送给好友
+        WeixinJSBridge.on('menu:share:appmessage', function(argv){
+            shareFriend();
+        });
+        // 分享到朋友圈
+        WeixinJSBridge.on('menu:share:timeline', function(argv){
+            shareTimeline();
+        });
+        // 分享到微博
+        WeixinJSBridge.on('menu:share:weibo', function(argv){
+            shareWeibo();
+        });
+    }, false);
+
+</script>
+</body>
+</html>

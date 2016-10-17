@@ -1,0 +1,19 @@
+#! /bin/bash
+
+NAME="pinwall-app cron qrsync"
+PINWALL_DIR=/opt/app/pinwall-app
+VENV_DIR=/opt/python-env/flask-env
+USER=design_admin
+GROUP=design_admin
+
+echo "Starting $NAME"
+
+cd $VENV_DIR
+source bin/activate
+
+export HOME=/home/design_admin/
+cd $PINWALL_DIR
+
+
+exec /opt/app/pinwall-app/cron_qrsync.py /opt/app/qiniu-devtools/qrsync /opt/app/pinwall-app/qiniu_conf.json 30
+

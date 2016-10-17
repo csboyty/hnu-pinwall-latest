@@ -1,0 +1,60 @@
+<section class="de_screen_box">
+	<h4 class="de_box_title">新建或设置作业荚</h4>
+	<form class="de_form_box de_form_box_create de_borderbox de_boxshadow" prevent-enter-submit name="boxUpdateForm" novalidate ng-submit="boxUpdateSubmit()">
+    <div class="de_left_col de_borderbox">
+        <p class="de_field_project_title">
+            <label>标题</label>
+            <input type="text"  maxlength="80"  ng-model="box.name" class="de_borderbox de_inputbox_gray"
+                   name="title">
+        </p>
+
+        <p class="de_field_project_tag">
+            <label>标签</label>
+            <ul class="de_borderbox de_category_tag_box">
+                <li ng-repeat="term in box.terms">
+                    <a href="" ng-click="deleteTag($index)">{{term}}</a>
+                </li>
+            </ul>
+            <p class="de_form_tip">在下方输入标签，按回车确认。</p>
+            <input type="text" class="de_inputbox_gray de_borderbox de_input_project_tag " maxlength="20"
+               placeholder="新标签..." ng-keydown="keyDownAddTag($event,newTag)"
+               ng-blur="blurAddTag(newTag)" name="newTag" ng-model="newTag">
+        </p>
+        <p class="de_field_project_description">
+            <label>内容说明</label>
+            <textarea class="de_borderbox de_inputbox_gray" id="boxDescription" name="description" ng-model="box.description" required></textarea>
+
+        </p>
+    </div>
+    <div class="de_borderbox de_right_col">
+        <div ng-if="boxId">
+            <div class="de_form_field">
+                <h5>作业荚状态</h5>
+                <p>
+                    <span class="de_box_current_state" ng-if="box.status==0">开放</span>
+                    <span class="de_box_current_state" ng-if="box.status!=0">关闭</span>
+                    <a href="" ng-if="box.status==0" toggle-lock-box="{{boxId}},{{box.status}}" class="de_box_change_state_btn">设为关闭</a>
+                    <a href="" ng-if="box.status!=0" toggle-lock-box="{{boxId}},{{box.status}}" class="de_box_change_state_btn">设为开放</a>
+                    <!--<a class="de_box_change_state_btn">设为开放</a>-->
+                </p>
+                <p class="de_form_tip">作业荚关闭后，用户将无法修改或删除已上传到作业荚的作品，也不能上传其他新的作品到作业荚。</p>
+            </div>
+            <div class="de_form_field">
+                <h5>作业荚中的作品</h5>
+                <p>
+                    <span class="de_box_entry_num">{{box.artifact_count}}</span>
+                    <a class="de_box_view_entry_btn" ng-href="topics/{{boxId}}">查看</a>
+                </p>
+            </div>
+            <div class="de_form_field">
+                <a class="de_box_destroy_btn de_red_btn" ng-click="deleteBox(boxId)">删除作业荚及其中的所有作品 (无法恢复，谨慎操作)</a>
+            </div>
+        </div>
+
+        <div class="de_form_field de_submit_field">
+            <input class="de_box_save_btn de_green_btn" type="submit" value="确定" />
+            <a class="de_box_save_btn de_button" href="topics">返回</a>
+        </div>
+    </div>
+</form>
+</section>

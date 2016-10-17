@@ -1,0 +1,241 @@
+<!--作品详情展示-->
+<div ng-controller="projectDetail">
+<!--工具栏-->
+<div class="de_project_header de_borderbox">
+    <a href="" ng-class="{de_flag_reg_zanned:project.praised,de_flag_reg_zan:!project.praised}"
+       class="de_btn_zan de_borderbox" ng-click="praiseProject(project.id)">赞</a>
+
+    <ul class="de_project_toolbar de_transition"
+        ng-if="(currentUser.roles|arrayHasElements:'admin')||
+        (currentUser.id==project.topic.user_id&&project.topic)||
+        (currentUser.id==project.user.id&&(!project.topic||(project.topic&&project.topic.status==0)))">
+        <li><a ng-if="currentUser.id==project.user.id||(currentUser.roles|arrayHasElements:'admin')"
+               class="de_toolbar_edit" ng-href="projects/{{project.id}}/update" title="编辑">编辑</a></li>
+        <li><a class="de_toolbar_delete"  href="" ng-click="deleteProject(project.id)" title="删除">删除</a></li>
+        <li ng-if="currentUser.roles|arrayHasElements:'admin'"><a g-class="{de_toolbar_invisible:!project.visible,de_toolbar_visible:project.visible}" href=""
+               ng-click="toggleShowProject(project.id)" title="显示/隐藏">显示/隐藏</a></li>
+    </ul>
+
+    <!--<a href="#" target="_self" ng-show="project.toHome"  class="de_btn_close_project_detail de_btn_back_to_home">关闭</a>-->
+    <a href=""  ng-click="hideProjectDetail()" class="de_btn_close_project_detail">关闭</a>
+</div>
+
+<!--显示详细信息-->
+<article class="de_project_detail de_borderbox de_boxshadow">
+    <h2>{{project.name}}</h2>
+
+    <p class="publishtime">{{project.created_at}}</p>
+
+    <div class="user_info">
+        <a ng-href="users/{{project.user.id}}">
+            <img class="photo" ng-src="{{project.user.setting.profile_image}}">
+
+            <p class="name">{{project.user.fullname}}</p>
+        </a>
+    </div>
+
+    <ul class="de_stats_tags">
+
+        <li class="badges" id="honorCount" title="勋章">{{project.honor_count}}</li>
+        <li class="likes" id="praiseCount" title="赞">{{project.praise_count}}</li>
+        <li class="comments" id="commentsCount" title="评论">{{project.comment_count}}</li>
+    </ul>
+
+
+    <p class="abstract">
+        {{project.description}}
+    </p>
+
+    <!--附件-->
+    <div class="main_content" >
+        <figure ng-repeat="at in project.assets" ng-if="!isMobile" ng-switch="at.type">
+            <img ng-switch-when="1" ng-src="{{at.profile_image}}"/>
+
+            <!--<a ng-switch-when="4" ng-click="showAttachmentDetail(at.media_file,at.type)"
+               class="de_has_media de_has_video" href="">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="networkVideo" ng-click="showAttachmentDetail(at.attachmentMediaLocation,at.type,at.attachmentId)"
+               href="" class="de_has_media de_has_web_video">
+                <img ng-src="{{at.attachmentPreviewLocation}}"/></a>
+
+            <a ng-switch-when="3d" ng-click="showAttachmentDetail(at.attachmentMediaLocation,at.type,at.attachmentId)"
+               href="" class="de_has_media de_has_3d">
+                <img ng-src="{{at.attachmentPreviewLocation}}"/></a>
+
+
+            <a ng-switch-when="2" ng-click="showAttachmentDetail(at.view_url,at.type)"
+               href="" class="de_has_media de_has_ppt">
+                <img ng-src="{{at.profile_image}}"/></a>
+
+            <a ng-switch-when="128" ng-click="showAttachmentDetail(at.view_url,at.type)" href="" class="de_has_media de_has_pdf">
+                <img ng-src="{{at.profile_image}}"/></a>
+
+            <a ng-switch-when="32" ng-href="{{at.media_file}}" target="_blank" class="de_has_media de_has_file">
+                <img ng-src="{{at.profile_image}}"/></a>
+
+            <a ng-switch-when="64" ng-click="showAttachmentDetail(at.media_file,at.type)"
+               href="" class="de_has_media de_has_flash">
+                <img ng-src="{{at.profile_image}}"/></a>
+
+            <a ng-switch-when="256" target="_blank"
+                 ng-href="{{at.view_url}}" class="de_has_media de_has_html5">
+                <img ng-src="{{at.profile_image}}"/></a>
+            -->
+
+            <a ng-switch-when="4" ng-href="{{at.media_file}}" target="_blank" class="de_has_media de_has_video">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+            <a ng-switch-when="2" ng-href="{{at.view_url}}" target="_blank"  class="de_has_media de_has_ppt">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="128" ng-href="{{at.view_url}}" target="_blank" class="de_has_media de_has_pdf">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="32" ng-href="{{at.media_file}}" target="_blank" class="de_has_media de_has_file">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="64" ng-click="showAttachmentDetail(at.media_file,at.type)"
+               href="" class="de_has_media de_has_flash">
+                <img ng-src="{{at.profile_image}}"/></a>
+
+            <a ng-switch-when="256" ng-href="{{at.view_url}}" target="_blank" class="de_has_media de_has_html5">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <figcaption ng-if="at.name||at.description">
+                {{at.name}}
+                <span class="description">
+                    {{at.description}}
+                </span>
+            </figcaption>
+
+        </figure>
+
+        <figure ng-repeat="at in project.assets" ng-if="isMobile" ng-switch="at.type">
+            <img ng-switch-when="1" ng-src="{{at.profile_image}}"/>
+
+            <a ng-switch-when="4" ng-href="{{at.media_file}}" target="_self" class="de_has_media de_has_video">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <!-- <a ng-switch-when="networkVideo" ng-click="showAttachmentDetail(at.attachmentMediaLocation,at.type,at.attachmentId)"
+                href="" class="de_has_media de_has_web_video">
+                 <img ng-src="{{at.attachmentPreviewLocation}}"/></a>
+
+             <a ng-switch-when="3d" ng-click="showAttachmentDetail(at.attachmentMediaLocation,at.type,at.attachmentId)"
+                href="" class="de_has_media de_has_3d">
+                 <img ng-src="{{at.attachmentPreviewLocation}}"/></a>-->
+
+
+            <a ng-switch-when="2" ng-href="{{at.view_url}}" target="_self"  class="de_has_media de_has_ppt">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="128" ng-href="{{at.view_url}}" target="_self" class="de_has_media de_has_pdf">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="32" ng-href="{{at.media_file}}" target="_self" class="de_has_media de_has_file">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="64" ng-href="{{at.media_file}}" target="_self"
+               class="de_has_media de_has_flash">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <a ng-switch-when="256" ng-href="{{at.view_url}}" target="_self" class="de_has_media de_has_html5">
+                <img ng-src="{{at.profile_image}}"/>
+            </a>
+
+            <figcaption ng-if="at.name||at.description">
+                {{at.name}}
+                <span class="description">
+                    {{at.description}}
+                </span>
+            </figcaption>
+
+        </figure>
+    </div>
+</article>
+
+<!--评论-->
+<div class="de_comment_box de_boxshadow de_borderbox">
+    <ul class="de_comment_list">
+        <li ng-repeat="c in commentObj.showComments">
+            <div class="user_info">
+                <a ng-href="user/{{c.user.id}}" class="de_borderbox">
+                    <img ng-src="{{c.user.setting.profile_image}}" class="photo">
+                </a>
+            </div>
+            <div class="comment_wrapper">
+                <a ng-href="user/{{c.user.id}}" class="name" ng-class="{vip_user:(c.user.roles|arrayHasElements:'vip')}">
+                    {{c.user.fullname}}</a>
+                <span class="publishtime">{{c.comment.commented_at}}</span>
+
+                <a ng-if="c.user.id==currentUser.id||(currentUser.roles|arrayHasElements:'admin')" href=""
+                   ng-click="deleteComment(c.comment.id,$index,project.id)" class="de_delete_comment">X</a>
+
+                <p class="comment">{{c.comment.content}}</p>
+            </div>
+        </li>
+    </ul>
+
+    <span ng-if="commentObj.hasMore" ng-click="loadMoreComments()" class="de_comment_more_btn">加载更多...</span>
+
+
+    <div ng-if="currentUser.id" class="de_comment_form de_reg_view de_borderbox">
+        <div class="user_info">
+            <a ng-href="user/{{currentUser.userId}}" class="de_borderbox" >
+                <img ng-src="{{currentUser.profile}}" class="photo">
+            </a>
+        </div>
+        <div class="comment_wrapper">
+            <a ng-href="user/{{currentUser.userId}}" class="name" ng-class="{vip_user:(currentUser.roles|arrayHasElements:'vip')}">
+                {{currentUser.name}}</a>
+            <textarea ng-model="commentObj.newComment" maxlength="200" class="comment de_borderbox de_inputbox_gray"
+                      placeholder="你的评论..."></textarea>
+            <input type="button" class="de_button de_btn_add_comment"
+                   ng-click="addComment(project.id,commentObj.newComment)" value="提交">
+        </div>
+    </div>
+
+    <div ng-if="!currentUser.id" class="de_comment_form de_borderbox">
+        <a href="" ng-click="login()" class="de_button de_borderbox de_btn_login_reg">发表评论前请先登录</a>
+    </div>
+</div>
+
+<!--相关作品-->
+<!--<h4>其他相关作品</h4>
+<ul class="de_project_grid">
+    <li class="de_borderbox" ng-repeat="sp in similarProjects">
+        <div class="user_info">
+            <a ng-href="user/{{sp.user.id}}">
+                <img class="photo" ng-src="{{sp.user.setting.profile_image}}"/>
+
+                <p class="name">{{sp.user.fullname}}</p>
+            </a>
+        </div>
+        <div class="project_info">
+            <a href="" ng-click="showProjectDetail(sp.artifact.id,true)">
+                <img class="thumb" ng-src="{{sp.artifact.profile_image}}">
+                <h4>{{sp.artifact.name}}</h4>
+
+                <p class="date">{{sp.artifact.created_at}}</p>
+            </a>
+        </div>
+        <ul class="de_stats_tags">
+            &lt;!&ndash; badges是荣誉勋章的数量 &ndash;&gt;
+            <li class="badges" title="勋章">{{sp.artifact.honor_count}}</li>
+            <li class="likes" title="赞">{{sp.artifact.praise_count}}</li>
+            <li class="comments" title="评价">{{sp.artifact.comment_count}}</li>
+        </ul>
+    </li>
+</ul>-->
+
+</div>

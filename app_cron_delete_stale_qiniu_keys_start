@@ -1,0 +1,18 @@
+#! /bin/bash
+
+NAME="pinwall-app cron delete qiniu keys"
+PINWALL_DIR=/opt/app/pinwall-app
+VENV_DIR=/opt/python-env/flask-env
+USER=design_admin
+GROUP=design_admin
+
+echo "Starting $NAME"
+
+cd $VENV_DIR
+source bin/activate
+
+cd $PINWALL_DIR
+
+
+exec python /opt/app/pinwall-app/delete_stale_qiniu_keys.py
+

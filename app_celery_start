@@ -1,0 +1,21 @@
+#! /bin/bash
+
+NAME="pinwall-app celery"
+PINWALL_DIR=/opt/app/pinwall-app
+VENV_DIR=/opt/python-env/flask-env
+USER=design_admin
+GROUP=design_admin
+
+echo "Starting $NAME"
+
+cd $VENV_DIR
+source bin/activate
+
+cd $PINWALL_DIR
+
+export PSYCOGREEN=true
+
+export PYTHONPATH=$PINWALL_DIR:$PYTHONPATH
+
+exec celery worker -A pinwall.tasks -P gevent -Q pinwall -c 1000 -l error --logfile logs/celery.log
+

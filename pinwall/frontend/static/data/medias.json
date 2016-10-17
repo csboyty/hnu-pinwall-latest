@@ -1,0 +1,21 @@
+{
+    "success":true,
+    "medias":{
+        "zy_image_2222222":{
+            "zy_media_type":"zy_image",
+            "zy_media_thumb_filename":"pic1.png",
+            "zy_media_thumb_filepath":"/design/data/pic1.png",
+            "zy_media_filename":"pic1.png",
+            "zy_media_filepath":"/design/data/pic1.png",
+            "zy_media_title":"dddddd",
+            "zy_media_memo":"ssssssssss"
+        },
+        "zy_image_22222222":{
+            "zy_media_type":"zy_image",
+            "zy_media_thumb_filename":"pic2.png",
+            "zy_media_thumb_filepath":"/design/data/pic2.png",
+            "zy_media_filename":"pic2.png",
+            "zy_media_filepath":"/design/data/pic2.png"
+        }
+    }
+}

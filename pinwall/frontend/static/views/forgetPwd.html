@@ -1,0 +1,27 @@
+<h3 class="de_popout_title">{{popFlags.title}}</h3>
+<a href="" class="de_popout_x_btn" ng-click="closePop()">关闭</a>
+<div class="de_wrapper de_transition" ng-controller="forgetPwd">
+
+<!-- 2.找回密码弹窗开始 -->
+    <article class="de_borderbox de_popout_recover_pwd">
+        <h4>不记得密码了？请输入您的注册邮箱，随后我们将发送一封邮件协助您找回密码。</h4>
+
+        <form name="forgetPwdForm" class="de_form_recover_pwd" novalidate ng-submit="forgetPwdSubmit()">
+            <p class="de_email_field">
+                <input type="email" class="de_borderbox de_inputbox_gray" ng-model="email"
+                       name="email" placeholder="邮箱"
+                       ng-maxlength="32" own-required required>
+                <span class="error" ng-if="forgetPwdForm.email.$dirty && forgetPwdForm.email.$invalid">
+                    <label ng-if="forgetPwdForm.email.$error.ownRequired">{{validMessage.required}}</label>
+                    <label ng-if="forgetPwdForm.email.$error.email">{{validMessage.email}}</label>
+                    <label ng-if="forgetPwdForm.email.$error.maxlength">{{validMessage.maxLength | setMaxLength:32}}</label>
+                </span>
+            </p>
+            <input type="submit" class="de_button de_submit_btn" value="提交" ng-disabled="forgetPwdForm.$invalid">
+        </form>
+        <div ng-if="emailUrl!=''">
+            请进入<a ng-href="{{emailUrl}}" class="de_green_text" target="_blank">邮箱</a>进行密码重置！
+        </div>
+    </article>
+<!-- 找回密码弹窗结束 -->
+</div>

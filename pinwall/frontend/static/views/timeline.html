@@ -1,0 +1,31 @@
+<section class="de_screen_project_timeline" pan-on-mouse-wheel>
+    <ul class="de_project_timeline de_borderbox">
+        <li class="de_borderbox" ng-repeat="project in projects">
+            <div class="user_info">
+                <a ng-href="users/{{project.user.id}}">
+                    <img class="photo" ng-src="{{project.user.setting.profile_image}}">
+                    <p class="name">{{project.user.fullname}}</p>
+                    <p class="date">{{project.artifact.created_at}}</p>
+                </a>
+            </div>
+            <div class="project_info">
+                <a href="" ng-click="showProjectDetail(project.artifact.id)">
+                    <span class="thumb_wrapper"><img class="thumb" ng-src="{{project.artifact.profile_image}}"></span>
+                    <h4>{{project.artifact.name}}</h4>
+                    <p class="abstract">
+                        {{project.artifact.description}}
+                    </p>                  
+                </a>
+            </div>
+            <p class="topic_title">
+            <a ng-if="project.topic" ng-href="topics/{{project.topic.id}}">来自：{{project.topic.name}}</a>
+            <a ng-if="!project.topic" ng-href="users/{{project.user.id}}">来自：{{project.user.fullname}}的作品集</a>
+            </p>            
+            <ul class="de_stats_tags">
+                <li class="badges" title="勋章">{{project.artifact.honor_count}}</li>
+                <li class="likes" title="赞">{{project.artifact.praise_count}}</li>
+                <li class="comments" title="评价">{{project.artifact.comment_count}}</li>
+            </ul>
+        </li>        
+    </ul>
+</section>

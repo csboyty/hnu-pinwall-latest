@@ -1,0 +1,191 @@
+<!-----------上传作品----------->
+<section class="de_screen_upload">
+   <h4 class="de_upload_title" ng-if="box.id!==0">上传至“{{box.name}}”</h4>
+    <h4 class="de_upload_title" ng-if="box.id===0">上传至“{{currentUser.name}}的作品集”</h4>
+    <nav class="de_tab_upload">
+        <ol>
+            <li><a href="" ng-class="{current:currentTab==1}" class="de_tab_step1 active" ng-click="setTabActive(1)">1. 填写基本信息</a></li>
+            <li><a href="" ng-class="{current:currentTab==2}" class="de_tab_step2 active" ng-click="setTabActive(2)">2. 上传</a></li>
+            <li><a href="" ng-class="{current:currentTab==3}" class="de_tab_step3 active"
+                   ng-click="setTabActive(3);getPreviewMedias('mediaItem','data-media-id')">3. 预览并提交</a></li>
+        </ol>
+    </nav>
+    <form class="de_form_upload de_borderbox de_boxshadow" prevent-enter-submit novalidate ng-submit="uploadFormSubmit()">
+        <div class="de_upload_step1" ng-show="currentTab==1">
+            <p class="de_field_project_title">
+                <label>标题</label>
+                <input type="text" maxlength="80" class="de_borderbox de_inputbox_gray"
+                       name="title" ng-model="project.name">
+            </p>
+
+            <p class="de_field_project_tag">
+                <label>标签</label>
+                <ul class="de_borderbox de_category_tag_box">
+                    <li ng-repeat="tag in project.terms">
+                        <a href="" ng-click="deleteTag($index)">{{tag}}</a>
+                    </li>
+                </ul>
+                <p class="de_form_tip">在下方输入标签，按回车确认。</p>
+                <input type="text" class="de_inputbox_gray de_borderbox de_input_project_tag " maxlength="20"
+                   placeholder="新标签..." ng-keydown="keyDownAddTag($event,newTag)"
+                   ng-blur="blurAddTag(newTag)" ng-model="newTag">
+            </p>
+            <p class="de_field_project_description">
+                <label>内容说明</label>
+                <textarea class="de_borderbox de_inputbox_gray" name="description" ng-model="project.description"></textarea></p>
+
+            <p class="de_field_project_thumb" id="uploadThumbContainer">
+                <span class="de_form_tip">请上传一张正方形、宽度500-800px的jpg或png图像作为缩略图。</span>
+                <a href="" class="de_btn_upload_thumb de_button" id="uploadThumb"
+                   ng-init="createThumbUploader('uploadThumb','uploadThumbContainer')">上传缩略图</a>
+
+                <img class="de_project_thumb" width="400" height="400" ng-src="{{project.profile_image}}"/>
+
+            </p>
+        </div>
+
+        <!-- step 2-->
+        <div class="de_upload_step2" ng-show="currentTab==2">
+            <div class="zy_uploader_column_left" id="zy_uploader_column_left">
+                <span class="zy_section_left_header" id="uploadImage" ng-init="createImageUploader('uploadImage','zy_uploader_column_left')">上传图片</span>
+
+                <ol class="zy_uploaded_medias_ol" drag="mediaItem">
+                    <li ng-click="showSetPanel(mediaId)" data-media-id="{{mediaId}}"
+                        ng-repeat="(mediaId,value) in project.medias" draggable="true"
+                        ng-class="{zy_media_list_active:value.active}" class="mediaItem">
+                        <img class="zy_small_thumb" ng-src="{{value.profile_image}}">
+                        <span title='{{value.profile_filename}}' class="zy_media_filename">
+                            {{value.profile_filename}}
+                        </span>
+                        <span class="zy_media_delete" ng-click="deleteMedia(mediaId)"></span>
+                    </li>
+                </ol>
+            </div>
+            <div class="zy_uploader_column_right" id="zy_uploader_column_right">
+                <header class="zy_section_right_header"><p><b>{{currentMediaObj.profile_filename||""}}</b></p></header>
+                <section ng-show="currentMediaObj.profile_filename">
+                    <article class="zy_content" >
+                        <section  class="zy_column_50">
+                            <section id="zy_left_bottom">                                
+                                <div class="zy_toolbar">
+                                   <label class="zy_section_heading">缩略图</label>
+                                    <input type="button" id="zy_upload_thumb_button" class="de_button zy_update_thumbnail" value="更换"
+                                           ng-init="mediaSetThumbUploader('zy_upload_thumb_button','zy_left_bottom')">
+                                    <div class="zy_tooltips">限2M以内的jpg或png</div>
+                                </div>
+                                <img ng-src="{{currentMediaObj.profile_image}}" class="zy_media_thumb">
+                            </section>
+                        </section>
+                        <section id="zy_right" class="zy_column_50">
+                            <section class="zy_bind_file_container">
+                                <label class="zy_section_heading">绑定媒体文件<span class="zy_tooltips">(可选)</span></label>
+                                <span class="de_button zy_bind_file" ng-mouseenter="showMediaMenu()"
+                                      ng-mouseleave="hideMediaMenu()">添加文件</span>
+                                <!--媒体文件类型的menu-->
+                                <div id="uploadContainer" ng-mouseenter="showMediaMenu()" ng-mouseleave="hideMediaMenu()"
+                                     ng-class="{zy_add_media_menu_active:uploadMediaMenuActive}" class="zy_add_media_menu">
+                                    <ul>
+                                        <li><a id="uploadMp4" class="zy_types2"
+                                               ng-init="createMp4Uploader('uploadMp4','uploadContainer')">视频（MP4）</a></li>
+                                        <li><a id="uploadPpt" class="zy_types3"
+                                               ng-init="createPptUploader('uploadPpt','uploadContainer')">幻灯片（PPTX）</a></li>
+                                        <li><a id="uploadPdf" class="zy_types4"
+                                               ng-init="createPdfUploader('uploadPdf','uploadContainer')" >文档（PDF）</a></li>
+                                        <li><a id="uploadSwf" class="zy_types5"
+                                               ng-init="createSwfUploader('uploadSwf','uploadContainer')">FLASH动画（SWF）</a></li>
+                                        <li><a id="uploadZip" class="zy_types6"
+                                               ng-init="createZipUploader('uploadZip','uploadContainer')">压缩包（ZIP）</a></li>
+                                        <li><a id="uploadHtml5" class="zy_types7"
+                                               ng-init="createHtml5Uploader('uploadHtml5','uploadContainer')">HTML5应用（ZIP）</a></li>
+                                        <!--<li><a id="upload3d" class="zy_types7"
+                                              ng-init="createFileUploader('uploadFile','uploadContainer')">3D文件</a></li>-->
+                                    </ul>
+                                </div>
+                                <div class="zy_bind_file_info" ng-show="currentMediaObj.filename">
+                                    <span class="zy_bind_file_name"
+                                          ng-class="{zy_types2:currentMediaObj.type==4,zy_types3:currentMediaObj.type==2,zy_types4:currentMediaObj.type==128,
+                                          zy_types5:currentMediaObj.type==64,zy_types6:currentMediaObj.type==32,zy_types7:currentMediaObj.type==256}">
+                                        {{currentMediaObj.filename}}</span>
+                                    <span class="zy_delete_bind_file" ng-click="deleteBindFile()">删除</span>
+                                </div>
+                            </section>
+                            <section>
+                                <label class="zy_section_heading">标题<span class="zy_tooltips">(可选)</span></label>
+                                <input ng-blur="setMediaTitle(currentMediaObj.name)" ng-model="currentMediaObj.name" maxlength="80" type="text" class="zy_input_text">
+                            </section>
+                            <section >
+                                <label class="zy_section_heading">描述<span class="zy_tooltips">(可选)</span></label>
+                                <textarea ng-blur="setMediaMemo(currentMediaObj.description)" ng-model="currentMediaObj.description" class="zy_textarea_input"></textarea>
+                            </section>
+                        </section>
+                    </article>
+                </section>
+            </div>
+        </div>
+
+        <!-- step 3-->
+        <div class="de_upload_step3" ng-show="currentTab==3">
+            <input type="submit" autocomplete="default" value="提交" class="de_borderbox de_submit_upload"
+                   name="de_submit_upload" id="de_submit_upload"/>
+            <article id="de_upload_preview" class="de_project_detail de_borderbox">
+                <h2>{{project.name}}</h2>
+                <p class="publishtime"></p>
+                <div class="user_info">
+                    <a ng-href="users/{{project.user.id}}">
+                        <img class="photo" ng-src="{{project.user.profile}}">
+                        <p class="name">{{project.user.name}}</p>
+                    </a>
+                </div>
+                <p class="abstract">
+                    {{project.description}}
+                </p>
+
+                <div class="main_content">
+                    <figure ng-repeat="at in project.assets" ng-switch="at.type">
+                        <img ng-switch-when="1" ng-src="{{at.profile_image}}"/>
+
+                        <a ng-switch-when="4" ng-click="showAttachmentDetail(at.media_file,at.type)"
+                           class="de_has_media de_has_video" href="">
+                            <img ng-src="{{at.profile_image}}"/>
+                        </a>
+
+                        <!-- <a ng-switch-when="networkVideo" ng-click="showAttachmentDetail(at.attachmentMediaLocation,at.type,at.attachmentId)"
+                            href="" class="de_has_media de_has_web_video">
+                             <img ng-src="{{at.attachmentPreviewLocation}}"/></a>
+
+                         <a ng-switch-when="3d" ng-click="showAttachmentDetail(at.attachmentMediaLocation,at.type,at.attachmentId)"
+                            href="" class="de_has_media de_has_3d">
+                             <img ng-src="{{at.attachmentPreviewLocation}}"/></a>-->
+
+
+                        <a ng-switch-when="2" ng-click="showAttachmentDetail(at.view_url,at.type)"
+                           href="" class="de_has_media de_has_ppt">
+                            <img ng-src="{{at.profile_image}}"/></a>
+
+                        <a ng-switch-when="128" ng-click="showAttachmentDetail(at.view_url,at.type)" href="" class="de_has_media de_has_pdf">
+                            <img ng-src="{{at.profile_image}}"/></a>
+
+                        <a ng-switch-when="32" ng-href="{{at.media_file}}" target="_blank" class="de_has_media de_has_file">
+                            <img ng-src="{{at.profile_image}}"/></a>
+
+                        <a ng-switch-when="64" ng-click="showAttachmentDetail(at.media_file,at.type)"
+                           href="" class="de_has_media de_has_flash">
+                            <img ng-src="{{at.profile_image}}"/></a>
+
+                        <a ng-switch-when="256" ng-click="showAttachmentDetail(at.view_url,at.type)"
+                           href="" class="de_has_media de_has_html5">
+                            <img ng-src="{{at.profile_image}}"/></a>
+
+                        <figcaption ng-if="at.name||at.description">
+                            {{at.name}}
+                            <span class="description">
+                                {{at.description}}
+                            </span>
+                        </figcaption>
+
+                    </figure>
+                </div>
+            </article>
+        </div>
+    </form>
+</section>

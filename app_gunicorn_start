@@ -1,0 +1,29 @@
+#! /bin/bash
+
+NAME="pinwall-app"
+PINWALL_DIR=/opt/app/pinwall-app
+VENV_DIR=/opt/python-env/flask-env
+SOCK_FILE=/opt/app/pinwall-app/sock
+USER=design_admin
+GROUP=design_admin
+NUM_WORKERS=4
+
+echo "Starting $NAME"
+
+cd $VENV_DIR
+source bin/activate
+
+cd $PINWALL_DIR
+
+export PSYCOGREEN=true
+RUN_DIR=$(dirname $SOCK_FILE)
+test -d  $RUN_DIR || mkdir -p $RUN_DIR
+
+exec gunicorn pinwall_wsgi:application -b 127.0.0.1:8000 -k gevent \
+    --name $NAME \
+    --workers $NUM_WORKERS \
+    --user=$USER --group=$GROUP \
+    --log-level=error \
+    --error-logfile /opt/app/pinwall-app/logs/gunicorn.log \
+    --bind=unix:$SOCK_FILE
+

@@ -1,0 +1,42 @@
+<h3 class="de_popout_title">{{popFlags.title}}</h3>
+	<a href="" class="de_popout_x_btn" ng-click="closePop()">关闭</a>
+    <div class="de_wrapper de_transition" ng-controller="editPwd">
+
+    <!-- 4.重置密码弹窗开始 -->
+        <article class="de_borderbox de_popout_reset_pwd de_left_col">
+
+            <h4>设置一个好记的密码吧。</h4>
+
+            <form name="editPwdForm" novalidate ng-submit="editPwdSubmit()">
+                <p class="de_pwd_field">
+                    <input type="password" class="de_borderbox de_inputbox_gray" name="oldPassword" ng-model="user.password"
+                           ng-minlength="6" ng-maxlength="20" own-required required placeholder="旧密码">
+                    <span class="error" ng-if="editPwdForm.oldPassword.$dirty && editPwdForm.oldPassword.$invalid">
+                        <label ng-if="editPwdForm.oldPassword.$error.ownRequired">{{validMessage.required}}</label>
+                        <label ng-if="editPwdForm.oldPassword.$error.minlength">{{validMessage.minLength | setMinLength:6}}</label>
+                        <label ng-if="editPwdForm.oldPassword.$error.maxlength">{{validMessage.maxLength | setMaxLength:20}}</label>
+                    </span>
+                </p>
+                <p class="de_pwd_field">
+                    <input type="password" id="password"  ng-minlength="6" ng-maxlength="20" own-required required ng-model="user.new_password"
+                           class="de_borderbox de_inputbox_gray" name="password" placeholder="新密码">
+                    <span class="error" ng-if="editPwdForm.password.$dirty && editPwdForm.password.$invalid">
+                        <label ng-if="editPwdForm.password.$error.ownRequired">{{validMessage.required}}</label>
+                        <label ng-if="editPwdForm.password.$error.minlength">{{validMessage.minLength | setMinLength:6}}</label>
+                        <label ng-if="editPwdForm.password.$error.maxlength">{{validMessage.maxLength | setMaxLength:20}}</label>
+                    </span>
+                </p>
+
+                <p class="de_pwd_field">
+                    <input type="password" class="de_borderbox de_inputbox_gray" pwd-check="password" ng-model="user.confirmPwd"
+                           name="confirmPwd">
+                    <span class="error" ng-if="editPwdForm.confirmPwd.$dirty && editPwdForm.confirmPwd.$invalid">
+                        <label ng-if="editPwdForm.confirmPwd.$error.noMatch">{{validMessage.pwdEqualError}}</label>
+                    </span>
+                </p>
+                <input type="submit" class="de_green_btn de_submit_btn" ng-disabled="editPwdForm.$invalid" value="提交">
+            </form>
+
+        </article>
+        <!-- 重置密码弹窗结束 -->
+</div>

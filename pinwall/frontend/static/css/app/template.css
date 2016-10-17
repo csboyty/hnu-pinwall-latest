@@ -1,0 +1,95 @@
+/**
+*后台模版的css
+*/
+html{
+    width: 100%;
+    height: 100%;
+}
+body {
+    width: 100%;
+    height: 100%;
+    background-color: #EFEFEF;
+    margin: 0px;
+    font-family: "微软雅黑", "黑体", Arial, "Times New Roman", Verdana;
+    text-align:left;
+}
+h1{margin:20px;}
+form{
+    width:400px;
+    margin:auto 20px;
+    display:block;
+}
+.de_borderbox {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+
+.de_logo{
+	height:40px;
+	line-height: 40px;
+	font-size: 18px;
+}
+.de_logo:before{
+	content: "";
+	width:40px;
+	height:40px;
+	background:url(../../images/app/logo_40.png) no-repeat;	
+	vertical-align: middle;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.de_error_msg{
+	font-size: 16px;
+	color:#999;
+	margin: 30px;
+	text-shadow: 0 1px rgba(255,255,255,1);
+	font-weight: bold;
+}
+
+.de_error_msg a{
+	color: #07af69;
+	text-decoration: none;
+}
+
+.de_form_row{
+    margin-bottom: 25px;
+    position: relative;
+    max-width: 400px;
+}
+.de_inputbox_gray{
+    width: 100%;
+    height: 40px;
+    vertical-align: middle;
+    display: block;
+    padding: 0 10px;
+    border: #ddd 1px solid;
+    background:#efefef;
+    font-size: 14px;
+}
+.de_inputbox_gray:focus {
+	outline: none;
+	background-color: #ddd;
+	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+}
+.de_submit_btn{
+    display: inline-block;
+    font-size: 12px;
+    text-decoration: none;
+    height: 40px;
+    line-height: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    border: #07af69 1px solid;
+    padding: 0 10px;
+    background: #09bc72; 
+    width: 100px;
+    display: block;
+}

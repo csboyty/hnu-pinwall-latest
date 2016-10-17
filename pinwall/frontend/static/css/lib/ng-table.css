@@ -1,0 +1,214 @@
+.ng-table{
+    width:100%;
+}
+.ng-table thead th,{
+  text-align: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.ng-table th.sortable {
+  cursor: pointer;
+}
+.ng-table th.sortable div {
+  padding-right: 18px;
+  position: relative;
+}
+.ng-table th.sortable div:after,
+.ng-table th.sortable div:before {
+  content: "";
+  border-width: 0 4px 4px;
+  border-style: solid;
+  border-color: #000 transparent;
+  visibility: visible;
+  right: 8px;
+  top: 50%;
+  position: absolute;
+  opacity: .3;
+  margin-top: -4px;
+}
+.ng-table th.sortable div:before {
+  margin-top: 2px;
+  border-bottom: none;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #000;
+}
+.ng-table th.sortable div:hover:after,
+.ng-table th.sortable div:hover:before {
+  opacity: 1;
+  visibility: visible;
+}
+.ng-table th.sortable.sort-desc,
+.ng-table th.sortable.sort-asc {
+  background-color: rgba(141, 192, 219, 0.25);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+}
+.ng-table th.sortable.sort-desc div:after,
+.ng-table th.sortable.sort-asc div:after {
+  margin-top: -2px;
+}
+.ng-table th.sortable.sort-desc div:before,
+.ng-table th.sortable.sort-asc div:before {
+  visibility: hidden;
+}
+.ng-table th.sortable.sort-asc div:after,
+.ng-table th.sortable.sort-asc div:hover:after {
+  visibility: visible;
+  filter: alpha(opacity=60);
+  -khtml-opacity: 0.6;
+  -moz-opacity: 0.6;
+  opacity: 0.6;
+}
+.ng-table th.sortable.sort-desc div:after {
+  border-bottom: none;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #000;
+  visibility: visible;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  filter: alpha(opacity=60);
+  -khtml-opacity: 0.6;
+  -moz-opacity: 0.6;
+  opacity: 0.6;
+}
+.ng-table th.filter .input-filter {
+  margin: 0;
+  display: block;
+  width: 100%;
+  min-height: 30px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.tableInfo{
+    clear: both;
+    float: left;
+    margin-top: 15px;
+}
+.pagination{
+    display:inline-block;
+    padding-left:0;
+    border-radius:4px;
+    float:right;
+    margin-top: 15px;
+}
+.pagination>li{
+    display:inline
+}
+.pagination>li>a,.pagination>li>span{
+    position:relative;
+    float:left;
+    padding:6px 12px;
+    margin-left:-1px;
+    line-height:1.428571429;
+    text-decoration:none;
+    background-color:#fff;
+    border:1px solid #ddd
+}
+.pagination>li:first-child>a,.pagination>li:first-child>span{
+    margin-left:0;
+    border-bottom-left-radius:4px;
+    border-top-left-radius:4px
+}
+.pagination>li:last-child>a,.pagination>li:last-child>span{
+    border-top-right-radius:4px;
+    border-bottom-right-radius:4px
+}
+.pagination>li>a:hover,.pagination>li>span:hover,.pagination>li>a:focus,.pagination>li>span:focus{
+    background-color:#eee
+}
+.pagination>.active>a,.pagination>.active>span,.pagination>.active>a:hover,
+.pagination>.active>span:hover,.pagination>.active>a:focus,.pagination>.active>span:focus{
+    z-index:2;color:#fff;
+    cursor:default;
+    background-color:#428bca;
+    border-color:#428bca
+}
+.pagination>.disabled>span,.pagination>.disabled>a,.pagination>.disabled>a:hover,
+.pagination>.disabled>a:focus{
+    color:#999;
+    cursor:not-allowed;
+    background-color:#fff;
+    border-color:#ddd
+}
+.pagination-lg>li>a,.pagination-lg>li>span{
+    padding:10px 16px;
+    font-size:18px
+}
+.pagination-lg>li:first-child>a,.pagination-lg>li:first-child>span{
+    border-bottom-left-radius:6px;
+    border-top-left-radius:6px
+}
+.pagination-lg>li:last-child>a,.pagination-lg>li:last-child>span{
+    border-top-right-radius:6px;
+    border-bottom-right-radius:6px
+}
+.pagination-sm>li>a,.pagination-sm>li>span{
+    padding:5px 10px;
+    font-size:12px
+}
+.pagination-sm>li:first-child>a,.pagination-sm>li:first-child>span{
+    border-bottom-left-radius:3px;
+    border-top-left-radius:3px
+}
+.pagination-sm>li:last-child>a,.pagination-sm>li:last-child>span{
+    border-top-right-radius:3px;
+    border-bottom-right-radius:3px
+}
+
+@media only screen and (max-width: 800px) {
+  .ng-table-responsive {
+    border-bottom: 1px solid #999999;
+  }
+  .ng-table-responsive tr {
+    border-top: 1px solid #999999;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+  }
+  .ng-table-responsive td:before {
+    position: absolute;
+    padding: 8px;
+    left: 0;
+    top: 0;
+    width: 50%;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+  .ng-table-responsive thead tr th {
+    text-align: left;
+  }
+  .ng-table-responsive thead tr.ng-table-filters th {
+    padding: 0;
+  }
+  .ng-table-responsive thead tr.ng-table-filters th form > div {
+    padding: 8px;
+  }
+  .ng-table-responsive td {
+    border: none;
+    border-bottom: 1px solid #eeeeee;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align: left;
+  }
+  .ng-table-responsive td:before {
+    content: attr(data-title-text);
+  }
+  .ng-table-responsive,
+  .ng-table-responsive thead,
+  .ng-table-responsive tbody,
+  .ng-table-responsive th,
+  .ng-table-responsive td,
+  .ng-table-responsive tr {
+    display: block;
+  }
+}

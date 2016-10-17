@@ -1,0 +1,25 @@
+.autoComplete .inputTxt{
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    vertical-align: middle;
+    display: block;
+    padding: 0 10px;
+    border: #ddd 1px solid;
+    background:#efefef;
+    font-size: 14px;
+}
+.autoComplete .item{
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 0 10px;
+}
+.autoComplete .item.active{
+    background: #ccc;
+}

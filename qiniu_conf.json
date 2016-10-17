@@ -1,0 +1,6 @@
+{
+    "src":          "/var/app/pinwall/qiniu-files/",
+    "dest":         "qiniu:access_key=Q-DeiayZfPqA0WDSOGSf-ekk345VrzuZa_6oBrX_&secret_key=fIiGiRr3pFmHOmBDR2Md1hTCqpMMBcE_gvZYMzwD&bucket=design-pinwall&key_prefix=html5/",
+    "deletable":    1,
+    "debug_level":  1
+}

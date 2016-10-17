@@ -1,0 +1,61 @@
+<!-----------用户首页----------->
+<section class="de_screen_user_profile " >    
+    <!-- 个人作品集就是一个特殊的 topic box -->
+    <ul class="de_topic_list">
+        <li class="de_topic_box">
+            <!-- 选题发布者 -->
+            <div class="user_info">
+                <a ng-href="users/{{user.id}}" class="de_borderbox">
+                    <img ng-src="{{user.setting.profile_image}}" class="photo">
+                    <p class="name">{{user.fullname}}</p>
+                </a>
+            </div>
+            <div class="topic_info">
+                <p class="created_date">{{user.registered_at}} 注册</p>
+                <p class="topic_title">{{user.fullname}}的作品集</p>
+                                
+                <ul class="de_stats_tags">
+                    <li class="uploads" title="上传">{{user.artifact_count}}</li>
+                    <li class="badges" title="勋章">{{user.honor_sum}}</li>
+                </ul>
+            </div>            
+            <ul class="topic_action">
+                <!-- 根据权限控制 -->
+                <li ng-if="user.active&&user.id==currentUser.id" class="de_topic_action_submit"><a ng-href="projects/create"  title="上传">上传</a></li>
+            </ul>
+            <ul class="project_info">
+                <li class="de_borderbox" ng-repeat="project in user.topProjects">
+                    <a href="" class="de_entity_link" ng-click="showProjectDetail(project.artifact.id)">
+                        <img ng-src="{{project.artifact.profile_image}}">
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+	<p class="topic_description">{{user.setting.description}}</p>
+   	
+   	<p class="noResult searchResult" ng-if="projects.length==0">{{user.fullname}}尚未上传任何作品。</p>
+    <!-- 个人作品列表 -->
+    <ul class="de_project_grid de_borderbox" >
+        <li class="de_borderbox" ng-repeat="project in projects">
+           <div class="user_info">
+                <a ng-href="users/{{user.id}}">
+                    <img class="photo" ng-src="{{user.setting.profile_image}}">
+                    <p class="name">{{user.fullname}}</p>
+                    <p class="date">{{project.artifact.created_at}}</p>
+                </a>
+            </div>
+            <div class="project_info">
+                <a href="" ng-click="showProjectDetail(project.artifact.id)">
+                    <img class="thumb" ng-src="{{project.artifact.profile_image}}">
+                    <h4>{{project.artifact.name}}</h4>                    
+                </a>
+            </div>            
+            <ul class="de_stats_tags">
+                <li class="badges" title="勋章">{{project.artifact.honor_count}}</li>
+                <li class="likes" title="赞">{{project.artifact.praise_count}}</li>
+                <li class="comments" title="评价">{{project.artifact.comment_count}}</li>
+            </ul>
+        </li>
+    </ul>
+</section>

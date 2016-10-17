@@ -1,0 +1,29 @@
+<h3 class="de_popout_title">{{popFlags.title}}</h3>
+	<a href="" class="de_popout_x_btn" ng-click="closePop()">关闭</a>
+    <div class="de_wrapper de_transition" ng-controller="editInfo">
+
+        <!-- 5.更新个人信息弹窗开始 -->
+        <article class="de_borderbox de_popout_edit_profile">
+            <div class="de_edit_col de_borderbox">
+                <form class="de_form_edit_profile" name="editInfoForm" ng-submit="editInfoSubmit()" novalidate>
+                    <p class="de_photo_field" id="de_change_figure_container">
+                        <img class="photo" ng-src="{{user.profile}}">
+                        <a href="" ng-init="createProfileUploader('de_change_figure','de_change_figure_container')"
+                           id="de_change_figure" class="de_change_figure" style="z-index: 0;"> 点击更换</a>
+                    </p>
+
+                    <p><em>{{user.email}}</em><span class="de_form_tip">（不可更改）</span></p>
+
+                    <p class="de_about_field">
+                        <textarea class="de_borderbox de_inputbox_gray" placeholder="关于你..."
+                                  ng-model="user.description" name="description"></textarea>
+                    </p>
+
+                    <input type="submit" class="de_green_btn de_btn_save_profile" ng-disabled="editInfoForm.$invalid"
+                           value="保存">
+
+                </form>
+            </div>
+        </article>
+        <!-- 更新个人信息弹窗开结束 -->
+</div>

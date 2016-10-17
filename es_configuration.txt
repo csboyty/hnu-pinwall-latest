@@ -1,0 +1,397 @@
+# create elasticsearch index pinwall
+POST /pinwall
+
+POST pinwall/_close
+
+PUT /pinwall/_settings
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "pinwall_stop_filter": {
+          "type": "stop",
+          "stopwords_path": "stopLibrary.dic"
+        },
+        "t2s_convert_filter": {
+          "type": "stconvert",
+          "delimiter": ",",
+          "convert_type": "t2s"
+        },
+        "s2t_convert_filter": {
+          "type": "stconvert",
+          "delimiter": ",",
+          "convert_type": "s2t"
+        },
+        "english_snowball_filter": {
+          "type": "snowball",
+          "language": "English"
+        }
+      },
+      "tokenizer": {
+        "index_ansj_tokenizer": {
+          "type": "ansj_index_token",
+          "is_name": false,
+          "is_num": false,
+          "is_quantifier": false
+        },
+        "query_ansj_tokenizer": {
+          "type": "ansj_query_token",
+          "is_name": false,
+          "is_num": false,
+          "is_quantifier": false
+        }
+      },
+      "analyzer": {
+        "index_ansj_analyzer": {
+          "type": "customer",
+          "tokenizer": "index_ansj_tokenizer",
+          "filter": [
+            "lowercase",
+            "english_snowball_filter",
+            "asciifolding",
+            "t2s_convert_filter",
+            "pinwall_stop_filter"
+          ]
+        },
+        "query_ansj_analyzer": {
+          "type": "customer",
+          "tokenizer": "query_ansj_tokenizer",
+          "filter": [
+            "lowercase",
+            "english_snowball_filter",
+            "asciifolding",
+            "t2s_convert_filter",
+            "pinwall_stop_filter"
+          ]
+        },
+        "keyword_lowercase_analyzer": {
+          "type": "customer",
+          "tokenizer": "keyword",
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
+        },
+        "keyword_lowercase_reverse_analyzer": {
+          "type": "customer",
+          "tokenizer": "keyword",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "reverse"
+          ]
+        }
+      }
+    }
+  }
+}
+
+# reopen index pinwall
+POST /pinwall/_open
+
+
+# create type: user
+PUT /pinwall/user/_mapping
+{
+  "user": {
+    "_id": {
+      "path": "id"
+    },
+    "_all": {
+      "enable":"false"
+    },
+    "properties": {
+      "id": {
+        "type": "integer"
+
+      },
+      "email": {
+        "type": "multi_field",
+        "fields": {
+          "email": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_analyzer"
+          },
+          "reverse": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_reverse_analyzer"
+
+          }
+        }
+      },
+      "fullname": {
+        "type": "multi_field",
+        "fields": {
+          "fullname": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_analyzer"
+          },
+          "reverse": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_reverse_analyzer"
+
+          }
+        }
+      },
+      "active": {
+        "type": "boolean"
+
+      },
+      "confirmed_at": {
+        "type": "date",
+        "format": "YYYY-MM-dd HH:mm:ss"
+
+      },
+      "registered_at": {
+        "type": "date",
+        "format": "YYYY-MM-dd HH:mm:ss",
+        "include_in_all": false
+      },
+      "roles": {
+        "type": "string",
+        "index": "not_analyzed"
+
+      },
+      "description": {
+        "type": "string",
+        "index_analyzer": "index_ansj_analyzer",
+        "search_analyzer": "query_ansj_analyzer"
+      },
+      "lang": {
+        "type": "string",
+        "index": "not_analyzed"
+
+      },
+      "tz": {
+        "type": "string",
+        "index": "not_analyzed",
+        "include_in_all": false
+      },
+      "comment_active": {
+        "type": "boolean"
+      },
+      "suggest_field": {
+        "type": "completion",
+        "index_analyzer": "simple",
+        "search_analyzer": "simple",
+        "payloads": true
+
+      }
+    }
+  }
+}
+
+# create type: topic
+PUT pinwall/topic/_mapping
+{
+  "topic": {
+    "_id": {
+      "path": "id"
+    },
+    "_all": {
+      "enable":false
+    },
+    "properties": {
+      "id": {
+        "type": "integer"
+
+      },
+      "user_id": {
+        "type": "integer"
+
+
+      },
+      "name": {
+        "type": "multi_field",
+        "fields": {
+          "name": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_analyzer"
+          },
+          "reverse": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_reverse_analyzer",
+            "include_in_all": false
+          }
+        }
+      },
+      "description": {
+        "type": "string",
+        "index_analyzer": "index_ansj_analyzer",
+        "search_analyzer": "query_ansj_analyzer"
+      },
+      "status": {
+        "type": "integer"
+
+      },
+      "terms": {
+        "type": "multi_field",
+        "fields": {
+          "terms": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_analyzer"
+          },
+          "reverse": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_reverse_analyzer"
+
+          }
+        }
+      },
+      "created_at": {
+        "type": "date",
+        "format": "YYYY-MM-dd HH:mm:ss"
+
+      },
+      "suggest_field": {
+        "type": "completion",
+        "index_analyzer": "simple",
+        "search_analyzer": "simple",
+        "payloads": true
+
+      }
+    }
+  }
+}
+
+PUT pinwall/topic/-1
+{
+  "user_id":1
+
+}
+
+# create type artifact
+PUT /pinwall/artifact/_mapping
+{
+  "artifact": {
+    "_id": {
+      "path": "id"
+    },
+    "_all": {
+     "enabled": false
+    },
+    "_parent":{
+      "type":"topic"
+    },
+
+
+    "properties": {
+      "id": {
+        "type": "integer",
+        "include_in_all": false
+      },
+      "user_id": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "multi_field",
+        "fields": {
+          "name": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_analyzer"
+          },
+          "reverse": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_reverse_analyzer"
+          }
+        }
+      },
+      "description": {
+        "type": "string",
+        "index_analyzer": "index_ansj_analyzer",
+        "search_analyzer": "query_ansj_analyzer"
+      },
+      "honor_count":{
+        "type":"integer",
+        "include_in_all": false
+      },
+      "visible": {
+        "type": "boolean",
+        "include_in_all": false
+      },
+      "terms": {
+        "type": "multi_field",
+        "fields": {
+          "terms": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_analyzer"
+          },
+          "reverse": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_reverse_analyzer"
+          }
+        }
+      },
+      "created_at": {
+        "type": "date",
+        "format": "YYYY-MM-dd HH:mm:ss"
+      },
+      "suggest_field": {
+        "type": "completion",
+        "index_analyzer": "simple",
+        "search_analyzer": "simple",
+        "payloads": true
+      }
+    }
+  }
+}
+
+
+# create type comment
+PUT /pinwall/comment/_mapping
+{
+  "comment": {
+    "_id": {
+      "path": "id"
+    },
+    "_all": {
+      "enabled": false
+    },
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "artifact_id": {
+        "type": "integer"
+      },
+      "artifact_name": {
+        "type": "multi_field",
+        "fields": {
+          "artifact_name": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_analyzer"
+          },
+          "reverse": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_reverse_analyzer"
+          }
+        }
+      },
+      "user_id": {
+        "type": "integer"
+      },
+      "user_name": {
+        "type": "multi_field",
+        "fields": {
+          "user_name": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_analyzer"
+          },
+          "reverse": {
+            "type": "string",
+            "analyzer": "keyword_lowercase_reverse_analyzer"
+          }
+        }
+      },
+      "content": {
+        "type": "string",
+        "index_analyzer": "index_ansj_analyzer",
+        "search_analyzer": "query_ansj_analyzer"
+      },
+      "commented_at": {
+        "type": "date",
+        "format": "YYYY-MM-dd HH:mm:ss"
+      }
+    }
+  }
+}

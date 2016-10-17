@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html ng-app="pinWall">
+<head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="fragment" content="!">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no"/>
+    <link rel="apple-touch-icon" href="images/app/logo_40.png" />
+    <meta name="description" content="“图钉墙”是由湖南大学设计艺术学院自主开发的设计作品与教学资源库，其中收录了湖南大学设计艺术学院及其他兄弟院校的各类课程作业、设计研究报告、教学课件和讲课视频。" />
+    <meta name="baidu-tc-cerfication" content="622f31c8e7be07f0ac794950d45efc53" />
+    <meta name="keywords" content="图钉墙, 工业设计, 艺术设计, 设计教育, 设计作品, 设计资源, 湖南大学设计艺术学院" />
+    <title>图钉墙 - HNU Design</title>
+
+    <!--<base id="de_base_url" href="http://localhost/DesignEngine_Web/"/>-->
+    <base id="de_base_url" href="http://design.hnu.edu.cn/pinwall/"/>
+
+    <link href="css/lib/toaster.css" rel="stylesheet" type="text/css"/>
+    <link href="js/src/autoComplete/autoComplete.css" rel="stylesheet" type="text/css"/>
+    <link href="css/lib/ng-table.css" rel="stylesheet" type="text/css"/>
+    <link href="css/app/general.css" rel="stylesheet" type="text/css"/>
+    <script src="js/lib/jquery-2.1.1.min.js"></script>
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular-route.min.js"></script>
+    <script src="js/lib/angular-resource.min.js"></script>
+    <script src="js/lib/angular-animate.min.js"></script>
+    <script src="js/lib/ng-table.min.js"></script>
+    <script src="js/lib/toaster.js"></script>
+	<script src="js/lib/TweenMax.min.js"></script>
+    <script src="js/lib/ScrollToPlugin.min.js"></script>
+    <script src="js/lib/Draggable.min.js"></script>
+    <script src="js/lib/ThrowPropsPlugin.js"></script>    
+    <script src="js/lib/plupload.full.min.js"></script>
+    <script src="js/lib/qiniu.js"></script>
+   <!-- <script src="http://qzone.qq.com/gy/404/data.js"></script>-->
+    <script src="js/src/baiduAnalytics.js"></script>
+    <script src="js/src/animations.js"></script>
+    <script src="js/src/services.js"></script>
+    <script src="js/src/filters.js"></script>
+    <script src="js/src/directives.js"></script>
+    <script src="js/src/viewControllers.js"></script>
+    <script src="js/src/popControllers.js"></script>
+    <script src="js/src/autoComplete/autoComplete.js"></script>
+    <script src="js/src/app.js"></script>
+</head>
+<body ng-controller="super" window-state-change>
+<toaster-container toaster-options="{'position-class': 'toast-bottom-right'}"></toaster-container>
+    <div class="de_page_wrapper" ng-show="mainFlags.showMainWrapper">
+        <header class="de_header">
+            <h1 class="de_logo"><a href="./" target="_self"><span class="de_logoplaceholder"></span>图钉墙</a></h1>
+
+            <!-----用户菜单----->
+            <nav class="de_user_nav de_borderbox">
+                <ul>
+                    <li class="de_reg_view" ng-show="currentUser.id">
+                        <a class="de_btn_user_profile de_borderbox" ng-href="users/{{currentUser.id}}">
+                            <img class="photo" ng-src="{{currentUser.profile}}" title="{{currentUser.name}}">
+                            <span ng-class="{vip_user:(currentUser.roles|arrayHasElements:'vip')}">{{currentUser.name}}</span>
+                        </a>
+                    </li>
+                    <!--<li class="de_reg_view" ng-show="currentUser.id">
+                        <a class="de_btn_upload de_borderbox" href="upload">上传</a>
+                    </li>-->
+                    <li class="de_reg_view " ng-show="currentUser.id">
+                        <a class="de_btn_hotdogmenu de_borderbox" href="" ng-click="toggleExtMenu($event)" title="菜单">更多</a>
+                        <ul ng-class="{de_ext_nav_active:mainFlags.extMenuActive}" class="de_ext_nav" id="de_ext_nav">
+                           	<li class="de_reg_view" ng-if="!currentUser.active">
+                        		<a  href="" ng-click="activeAccount()" class="de_btn_activate" title="您的账号未激活，点击“激活”将重新发送确认邮件到注册邮箱。">激活</a>
+                    		</li>
+                           	<li class="de_reg_view " ng-if="currentUser.active">
+                                <a ng-href="users/{{currentUser.id}}" class="de_btn_uploads" title="我的作品集">我的作品集</a>
+                                <a class="de_btn_new_upload de_borderbox"   ng-href="projects/create" title="上传作品">上传作品</a>
+                            </li>
+                            <li class="de_reg_view" ng-if="currentUser.active&&currentUser.roles|arrayHasElements:'vip'">
+                                <a ng-href="users/{{currentUser.id}}/topics" class="de_btn_boxes" title="我的作业荚">我的作业荚</a>
+                                <a class="de_btn_new_box de_borderbox" ng-href="topics/create" title="创建作业荚">创建作业荚</a>
+                            </li>                                                       
+                            <li class="de_reg_view" ng-if="currentUser.active">
+                                <a href="" ng-click="editInfo()" class="de_btn_edit_profile" title="修改个人信息">修改个人信息</a>
+                            </li>
+                            <li class="de_reg_view " ng-if="currentUser.active">
+                                <a href="" ng-click="editPwd()" class="de_btn_pwd">修改密码</a>
+                            </li>
+                            <li class="de_admin_view " ng-if="currentUser.roles|arrayHasElements:'admin'">
+                                <a href="admin/users" title="用户管理">用户管理</a>
+                            </li>
+                            <li class="de_admin_view " ng-if="currentUser.roles|arrayHasElements:'admin'">
+                                <a href="admin/projects" title="作品管理">作品管理</a>
+                            </li>
+                            <li class="de_admin_view " ng-if="currentUser.roles|arrayHasElements:'admin'">
+                                <a href="admin/comments" title="评论管理">评论管理</a>
+                            </li>
+                            <li class="de_reg_view ">
+                                <a href="" ng-click="logout()" class="de_btn_exit" title="退出登录">退出登录</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="de_guest_view" ng-if="!currentUser.id">
+                        <a class="de_btn_login_reg de_borderbox" href="" ng-click="login()" title="登录/注册">登录/注册</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-----顶部菜单----->
+            <nav class="de_top_nav" id="de_top_nav" >
+                <ul>
+                    <li><a href="projects" ng-class="{active:mainFlags.currentMenu=='project'}" class="de_borderbox" title="设计廊">设计廊</a></li>
+                    <li class="de_btn_topicbox"><a href="topics" ng-class="{active:mainFlags.currentMenu=='box'}" class="de_borderbox" title="作业荚">作业荚</a></li>
+                    <li class="de_btn_filter"><a href="" class="de_borderbox" ng-click="toSearchPanel()" title="探索...">探索...</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="de_screen_container" ng-view window-scroll click-to-hide-modal-panel>
+		</div>
+		<footer class="de_footer">
+            <p>© 湖南大学设计艺术学院，保留所有权利。</p>
+        </footer>
+    </div>
+
+
+    <!-----------作品详情----------->
+    <section class="de_screen_project_detail"
+             ng-show="mainFlags.showProjectDetailFlag" ng-include="mainFlags.projectDetailTemplate" >
+
+    </section>
+
+    <!-----------弹窗小组件----------->
+    <section class="de_popout de_boxshadow de_borderbox de_animation_popout" ng-include="popFlags.popTemplateUrl">
+
+    </section>
+
+    <!-----------媒体详情----------->
+    <section class="de_pop_show_media" ng-if="mainFlags.showPlayMedialPanel">
+        <!--<div class="de_pop_show_media_content" ng-include="mainFlags.mediaPlayTemplate"></div>-->
+        <!--<embed class="de_pop_show_flash" name="plugin" type="application/x-shockwave-flash"
+               width="100%" height="100%" wmode="opaque"
+               ng-if="mainFlags.playMediaType=='64'&&mainFlags.playMediaPath!=''"></embed>-->
+        <embed class="de_pop_show_flash" name="plugin" type="application/x-shockwave-flash"
+               width="100%" height="100%" wmode="opaque" embed-src="{{mainFlags.playMediaPath}}"
+               src="{{mainFlags.playMediaPath}}" ng-if="mainFlags.playMediaType=='64'&&mainFlags.playMediaPath!=''"></embed>
+        <iframe class="de_pop_show_media_content"  ng-src="{{mainFlags.playMediaPath}}" ng-if="mainFlags.playMediaType!='64'&&mainFlags.playMediaPath!=''">
+        </iframe>
+        <div class="de_pop_show_media_content" ng-if="mainFlags.playMediaPath==''">正在处理资源，暂时不能观看。</div>
+
+        <!--放到后面才能在embed上面显示-->
+        <span class="de_pop_show_media_close" ng-click="closePlayMediaPanel()">关闭</span>
+    </section>
+	
+	<!-----------blackout----------->
+    <div class="de_blackout" ng-show="rootFlags.showBlackOut"></div>
+    <!-----------load spinner----------->
+    <div class="de_loading de_animation_loading" ng-show="rootFlags.showLoading">
+        <div class="de_loading_spinner"></div>
+    </div>
+
+</body>
+</html>

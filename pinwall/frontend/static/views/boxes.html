@@ -1,0 +1,57 @@
+<!-----------显示选题----------->
+<section class="de_topic_wrapper" >
+    <div class="de_box_toolbar">
+        <label>显示作业荚:</label>
+        <a href="" ng-class="{active:filter.scope==''}" ng-click="filter.scope='';loadBoxes();">全部</a>
+        <a href="" ng-class="{active:filter.scope=='open'}" ng-click="filter.scope='open';loadBoxes();">开放中</a>
+        <a href="" ng-class="{active:filter.scope=='closed'}" ng-click="filter.scope='closed';loadBoxes();">已关闭</a>
+        <a href="" ng-class="{active:filter.scope=='me'}" ng-if="currentUser.id" ng-click="filter.scope='me';loadBoxes();">由我创建</a>
+        <span class="de_search_wrapper">
+        <input  type="text" class="searchInput de_borderbox de_inputbox_gray" ng-keydown="keyDownSearch($event)" ng-model="filter.keyword">
+        </span>
+    </div>
+    <p class="noResult" ng-if="boxes.length==0&&loadedData">哎呀，没找到相关作业荚。</p>
+    <!-- 选题列表 -->
+    <ul class="de_topic_list">        
+        <li class="de_topic_box" ng-repeat="box in boxes">
+            <div class="user_info">
+                <a ng-href="users/{{box.user.id}}" class="de_borderbox">
+                    <img ng-src="{{box.user.setting.profile_image}}" class="photo">
+                    <p class="name">{{box.user.fullname}}</p>
+                </a>
+            </div>
+            <div class="topic_info">
+                <p class="created_date">{{box.topic.created_at}} 创建</p>
+                <a ng-href="topics/{{box.topic.id}}">
+                    <p class="topic_title">
+                        {{box.topic.name}}
+                    </p>
+                </a>
+                <ul class="de_stats_tags">
+                    <li class="uploads" title="上传">{{box.topic.artifact_count}}</li>
+                </ul>
+            </div>
+            <ul class="topic_action" ng-class="{topic_closed:box.topic.status!=0}">
+                <!-- 根据权限控制 -->
+                <li ng-if="box.topic.status==0" class="de_topic_action_submit">
+                    <a ng-if="currentUser.id&&currentUser.active" ng-href="topic/{{box.topic.id}}/artifact/"  title="上传">上传</a>
+                    <a ng-if="!currentUser.id" href="" ng-click="login()" title="上传">上传</a>
+                </li>
+                <li ng-if="box.topic.status!=0" class="de_topic_action_view"><a ng-href="topics/{{box.topic.id}}" title="查看">查看</a></li>
+                <li ng-if="box.user.id==currentUser.id||(currentUser.roles|arrayHasElements:'admin')"
+                    ng-class="{de_topic_action_lock:box.topic.status==0,de_topic_action_unlock:box.topic.status!=0}">
+                    <a href="" toggle-lock-box="{{box.topic.id}},{{box.topic.status}},{{$index}}" title="锁定">锁定</a></li>
+
+                <li ng-if="box.user.id==currentUser.id||(currentUser.roles|arrayHasElements:'admin')" class="de_topic_action_setting">
+                    <a ng-href="topics/{{box.topic.id}}/update" title="设置">设置</a></li>
+            </ul>
+            <ul class="project_info">
+                <li class="de_borderbox" ng-repeat="project in box.artifacts">
+                    <a href="" class="de_entity_link" ng-click="showProjectDetail(project.artifact.id)">
+                        <img ng-src="{{project.artifact.profile_image}}">
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</section>
