@@ -58,12 +58,7 @@ default_user_profile = "http://design.hnu.edu.cn/pinwall/images/default_profile.
 
 redis_url = "redis://localhost:6379/10"
 tmp_dir = u"/var/app/pinwall/tmp"
-qiniu_sync_dir = "/var/app/pinwall/qiniu-files/"
-qiniu_baseurl = "http://design-pinwall.qiniudn.com/"
-qiniu_html5_prefix = "http://design-pinwall.qiniudn.com/html5/"
-qiniu_bucket = "design-pinwall"
-qiniu_ak = "Q-DeiayZfPqA0WDSOGSf-ekk345VrzuZa_6oBrX_"
-qiniu_sk = "fIiGiRr3pFmHOmBDR2Md1hTCqpMMBcE_gvZYMzwD"
+
 
 show_boxview_uri = domain_name + "/boxview"
 
