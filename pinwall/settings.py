@@ -18,8 +18,6 @@ MAIL_DEFAULT_SENDER = "design@hnu.edu.cn"
 MAIL_SERVER = "smtp.hnu.edu.cn"
 MAIL_PORT = 25
 MAIL_USE_TLS = True
-MAIL_USERNAME = "design@hnu.edu.cn"
-MAIL_PASSWORD = "renke8888"
 
 SECURITY_POST_LOGIN_VIEW = "/"
 SECURITY_POST_LOGOUT_VIEW = "/"
